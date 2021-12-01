@@ -37,7 +37,7 @@
         android:layout_marginBottom="64dp"
         android:clickable="true"
         android:onClick="recordStop"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/recStart"
         app:layout_constraintTop_toBottomOf="@+id/soundLength"
