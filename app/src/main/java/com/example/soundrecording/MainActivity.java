@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    init();
+        init();
     }
 
     @Override
@@ -47,5 +47,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view){
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        manager.closeDb(); // ЗАКРЫТЬ БАЗУ ДАННЫХ
     }
 }

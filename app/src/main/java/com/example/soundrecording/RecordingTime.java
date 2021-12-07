@@ -1,4 +1,4 @@
-package com.example.mynotebook;
+package com.example.soundrecording;
 
 import android.os.Parcel;
 import android.os.Parcelable;

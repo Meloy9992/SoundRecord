@@ -21,15 +21,17 @@ public class ManagerDb {
         helper = new HelperDb(context);
     }
 
-    public void openDb(){ helper.getReadableDatabase();}
+    public void openDb() {
+        database = helper.getReadableDatabase();
+    }
 
-    public void insertToDb(String recName, String filePath, int recordingLength, int addedTime){
+    public void insertToDb(String recName, String filePath, String recordingLength, String addedTime){
         ContentValues contentValues = new ContentValues();
         contentValues.put(ConstantsDb.RECORDING_NAME, recName);
         contentValues.put(ConstantsDb.FILE_PATH, filePath);
         contentValues.put(ConstantsDb.RECORDING_LENGTH, recordingLength);
         contentValues.put(ConstantsDb.TIME_ADDED, addedTime);
-        database.insert(ConstantsDb.DB_NAME, null, contentValues);
+        database.insert(ConstantsDb.TABLE_NAME, null, contentValues);
     }
 
     public void updateFromDb(String recName, String filePath, int recordingLength, int addedTime, int id){
@@ -39,7 +41,7 @@ public class ManagerDb {
         contentValues.put(ConstantsDb.FILE_PATH, filePath);
         contentValues.put(ConstantsDb.RECORDING_LENGTH, recordingLength);
         contentValues.put(ConstantsDb.TIME_ADDED, addedTime);
-        database.update(ConstantsDb.DB_NAME, contentValues, selection, null);
+        database.update(ConstantsDb.TABLE_NAME, contentValues, selection, null);
     }
 
     public List<ListAudio> getFromDb(String searchText){
@@ -67,7 +69,7 @@ public class ManagerDb {
 
     public void deleteFromDb(int id){
         String selection = ConstantsDb._ID + "=" + id;
-        database.delete(ConstantsDb.DB_NAME, selection, null);
+        database.delete(ConstantsDb.TABLE_NAME, selection, null);
     }
 
     public void closeDb(){helper.close();}
