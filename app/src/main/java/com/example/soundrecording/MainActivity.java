@@ -1,6 +1,8 @@
 package com.example.soundrecording;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void init(){
         manager = new ManagerDb(this);
-     //   buttonRec = findViewById(R.id.recButton);
         recyclerView = findViewById(R.id.rcView);
         mainAdapter = new MainAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
+        getItemTouchHelper().attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         manager.openDb();
-//        mainAdapter.updateAdapter(manager.getFromDb(""));
+        mainAdapter.updateAdapter(manager.getFromDb(""));
     }
 
     public void onClick(View view){
@@ -53,5 +55,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         manager.closeDb(); // ЗАКРЫТЬ БАЗУ ДАННЫХ
+    }
+
+    private ItemTouchHelper getItemTouchHelper(){
+        return new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                mainAdapter.removeItem(viewHolder.getAdapterPosition(), manager);
+            }
+        });
     }
 }

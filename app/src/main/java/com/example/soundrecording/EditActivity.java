@@ -48,7 +48,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-    public void init(){
+    private void init(){
         buttonStop = findViewById(R.id.recStop);
         buttonRec = findViewById(R.id.recStart);
         manager = new ManagerDb(this);
@@ -114,7 +114,6 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        releasePlayer();
         releaseRecorder();
     }
 
@@ -125,24 +124,7 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-    private void releasePlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-    }
 
-    public void playStart(View v) {
-        try {
-            releasePlayer();
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(fileName);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void accessPermission(){
         ActivityCompat.requestPermissions(this, new

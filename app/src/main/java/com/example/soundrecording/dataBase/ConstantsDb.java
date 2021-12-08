@@ -1,7 +1,7 @@
 package com.example.soundrecording.dataBase;
 
 public class ConstantsDb {
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final String LIST_ITEM_INTENT = "list_item_intent";
 
     public static final String DB_NAME = "audioRecording.db";
