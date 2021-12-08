@@ -5,7 +5,9 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +28,12 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class EditActivity extends AppCompatActivity {
 
     private ManagerDb manager;
-    private long startTime;
-    private long stopTime;
     private FloatingActionButton buttonRec;
     private FloatingActionButton buttonStop;
-    private MediaPlayer mediaPlayer;
     private MediaRecorder mediaRecorder;
     private String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
     private Random random;
+    private Chronometer chronometer;
     public static final int RequestPermissionCode = 1;
     private String nameRec = "null";
     private String filePath = "null";
@@ -50,6 +50,7 @@ public class EditActivity extends AppCompatActivity {
 
     private void init(){
         buttonStop = findViewById(R.id.recStop);
+        chronometer = findViewById(R.id.soundLength);
         buttonRec = findViewById(R.id.recStart);
         manager = new ManagerDb(this);
         random = new Random();
@@ -75,15 +76,13 @@ public class EditActivity extends AppCompatActivity {
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.setOutputFile(fileName);
             startTime = System.currentTimeMillis();
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
             mediaRecorder.prepare();
             mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String timeRecord(long start, long finish){
-        return "" + ((finish - start) / 1000);
     }
 
     public String timeAdded(){
@@ -99,7 +98,8 @@ public class EditActivity extends AppCompatActivity {
             mediaRecorder.stop();
         }
         stopTime = System.currentTimeMillis();
-        manager.insertToDb(nameRec, fileName, timeRecord(startTime, stopTime), timeAdded());
+        chronometer.stop();
+        manager.insertToDb(nameRec, fileName, (String) chronometer.getText(), timeAdded());
         Toast.makeText(this, "Ваша запись сохранена в: " + fileName, Toast.LENGTH_LONG).show();
         manager.closeDb();
         finish();
