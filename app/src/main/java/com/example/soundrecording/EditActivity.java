@@ -75,7 +75,6 @@ public class EditActivity extends AppCompatActivity {
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.setOutputFile(fileName);
-            startTime = System.currentTimeMillis();
             chronometer.setBase(SystemClock.elapsedRealtime());
             chronometer.start();
             mediaRecorder.prepare();
@@ -97,7 +96,6 @@ public class EditActivity extends AppCompatActivity {
         if (mediaRecorder != null) {
             mediaRecorder.stop();
         }
-        stopTime = System.currentTimeMillis();
         chronometer.stop();
         manager.insertToDb(nameRec, fileName, (String) chronometer.getText(), timeAdded());
         Toast.makeText(this, "Ваша запись сохранена в: " + fileName, Toast.LENGTH_LONG).show();
