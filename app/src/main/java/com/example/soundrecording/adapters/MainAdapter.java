@@ -15,6 +15,7 @@ import com.example.soundrecording.ViewActivity;
 import com.example.soundrecording.dataBase.ConstantsDb;
 import com.example.soundrecording.dataBase.ManagerDb;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ItemHolder> {
 
     private Context context;
     private List<ListAudio> listAudio;
+    private File file;
 
     public MainAdapter(Context context) {
         this.context = context;
@@ -79,8 +81,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ItemHolder> {
     }
 
     public void removeItem(int position, ManagerDb manager){
+        file = new File(listAudio.get(position).getFilePath());
         manager.deleteFromDb(listAudio.get(position).getId());
         listAudio.remove(position);
+        file.delete();
         notifyItemRangeChanged(0, listAudio.size());
         notifyItemRemoved(position);
     }
