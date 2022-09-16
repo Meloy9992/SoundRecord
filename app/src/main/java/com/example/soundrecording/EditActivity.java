@@ -33,6 +33,8 @@ public class EditActivity extends AppCompatActivity {
     private MediaRecorder mediaRecorder;
     private String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
     private Random random;
+    private long startTime;
+    private long stopTime;
     private Chronometer chronometer;
     public static final int RequestPermissionCode = 1;
     private String nameRec = "null";
@@ -75,13 +77,17 @@ public class EditActivity extends AppCompatActivity {
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mediaRecorder.setOutputFile(fileName);
-            chronometer.setBase(SystemClock.elapsedRealtime());
+            startTime = System.currentTimeMillis();
             chronometer.start();
             mediaRecorder.prepare();
             mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String timeRecord(long start, long finish){
+        return "" + (((finish - start) / 1000) + 2);
     }
 
     public String timeAdded(){
@@ -96,8 +102,9 @@ public class EditActivity extends AppCompatActivity {
         if (mediaRecorder != null) {
             mediaRecorder.stop();
         }
+        stopTime = System.currentTimeMillis();
         chronometer.stop();
-        manager.insertToDb(nameRec, fileName, (String) chronometer.getText(), timeAdded());
+        manager.insertToDb(nameRec, fileName, timeRecord(startTime, stopTime), timeAdded());
         Toast.makeText(this, "Ваша запись сохранена в: " + fileName, Toast.LENGTH_LONG).show();
         manager.closeDb();
         finish();
